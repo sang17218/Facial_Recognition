@@ -1,8 +1,3 @@
-# USAGE
-# python extract_embeddings.py --dataset dataset --embeddings output/embeddings.pickle \
-#	--detector face_detection_model --embedding-model openface_nn4.small2.v1.t7
-
-# import the necessary packages
 from imutils import paths
 import numpy as np
 import argparse
@@ -11,7 +6,7 @@ import pickle
 import cv2
 import os
 
-# construct the argument parser and parse the arguments
+#parsing the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--dataset", required=True,
 	help="path to input directory of faces + images")
@@ -25,7 +20,7 @@ ap.add_argument("-c", "--confidence", type=float, default=0.5,
 	help="minimum probability to filter weak detections")
 args = vars(ap.parse_args())
 
-# load our serialized face detector from disk
+# loading serialized face detector from disk
 print("[INFO] loading face detector...")
 protoPath = os.path.sep.join([args["detector"], "deploy.prototxt"])
 modelPath = os.path.sep.join([args["detector"],
@@ -55,9 +50,7 @@ for (i, imagePath) in enumerate(imagePaths):
 		len(imagePaths)))
 	name = imagePath.split(os.path.sep)[-2]
 
-	# load the image, resize it to have a width of 600 pixels (while
-	# maintaining the aspect ratio), and then grab the image
-	# dimensions
+	# load the image, resize it to have a width of 600 pixels (while maintaining the aspect ratio), and then grab the image dimensions
 	image = cv2.imread(imagePath)
 	image = imutils.resize(image, width=600)
 	(h, w) = image.shape[:2]
@@ -67,8 +60,7 @@ for (i, imagePath) in enumerate(imagePaths):
 		cv2.resize(image, (300, 300)), 1.0, (300, 300),
 		(104.0, 177.0, 123.0), swapRB=False, crop=False)
 
-	# apply OpenCV's deep learning-based face detector to localize
-	# faces in the input image
+	# apply OpenCV's deep learning-based face detector to localize faces in the input image
 	detector.setInput(imageBlob)
 	detections = detector.forward()
 
